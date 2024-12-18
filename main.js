@@ -1,7 +1,12 @@
 let form = document.querySelector('#addForm');
 let itemsList = document.querySelector('#items');
+let filter = document.querySelector('#filter');
 
 form.addEventListener('submit', addItem);
+itemsList.addEventListener('click', removeItem);
+filter.addEventListener('keyup', filterItems);
+
+// Добавление новой задачи
 function addItem(e) {
   e.preventDefault();
 
@@ -24,4 +29,27 @@ function addItem(e) {
   itemsList.prepend(newElement);
 
   newIteminput.value = '';
+}
+// Удаление задачи
+function removeItem(e) {
+  if (e.target.hasAttribute('data-action') && e.target.getAttribute('data-action') == 'delete') {
+    if (confirm('Удалить задачу?')) {
+      e.target.parentNode.remove();
+    }
+  }
+}
+// Фильтрация
+function filterItems(e) {
+  let searchedText = e.target.value.toLowerCase();
+
+  let items = itemsList.querySelectorAll('li');
+
+  items.forEach(function (item) {
+    let itemText = item.firstChild.textContent.toLowerCase();
+    if (itemText.indexOf(searchedText) != -1) {
+        item.style.display = 'block';
+    } else  {
+        item.style.display = 'none';
+    }
+  });
 }
